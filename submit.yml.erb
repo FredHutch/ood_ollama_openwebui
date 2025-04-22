@@ -1,0 +1,20 @@
+<%-
+base_slurm_args = ["--nodes=1", "--ntasks-per-node=#{num_cores.to_i}", "--partition=interactive"]
+if want_gpu == "1"
+  base_slurm_args += ["--gres=gpu"]
+end
+
+-%>
+
+---
+batch_connect:
+  template: "basic"
+  conn_params:
+    -  csrf_token
+
+script:
+  native: 
+  <%- base_slurm_args.each do |arg| %>
+    - "<%= arg %>"
+  <%- end %>  
+  

@@ -1,0 +1,10 @@
+Bootstrap: docker
+From: ollama/ollama:latest
+
+%runscript
+    ollama "${@}"
+
+%apprun bash
+     echo Starting Shell
+     exec /bin/bash
+

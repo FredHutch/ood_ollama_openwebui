@@ -1,0 +1,24 @@
+Bootstrap: docker
+Registry: ghcr.io
+From: open-webui/open-webui:v0.5.18
+
+%runscript
+    bash /app/backend/start.sh "${@}"
+
+# Here we can set any number of environmental variables for Open WebUI. By setting OLLAMA_BASE_URL, we set the address for Open WebUI to check for an Ollama instance
+# We set WEBUI_AUTH to False here, for a single-user setup, which bypasses the Open WebUI login page. Set this to True if you plan to have multiple users.
+# Note: You CANNOT switch between single-user mode and multi-account mode after this change.
+%environment
+    export OLLAMA_BASE_URL=http://localhost:11434
+    export WEBUI_AUTH=False
+
+%post
+  pip install email-validator
+  apt-get update
+  apt-get install -y vim
+  sed  -i -e 's&site.webmanifest"&site.webmanifest" crossorigin="use-credentials"&' /app/build/index.html
+
+%apprun bash
+     echo Starting Shell
+     exec /bin/bash
+

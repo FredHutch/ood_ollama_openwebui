@@ -1,0 +1,6 @@
+*.local_history
+*.tar
+*.sif
+bla.sh
+*.out
+Dockerfile*

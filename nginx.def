@@ -1,0 +1,16 @@
+Bootstrap: docker
+From: nginx:1.26.3
+
+%runscript
+     nginx -g 'daemon off;' $*
+
+%apprun bash
+     echo Starting Shell
+     exec /bin/bash
+
+%apprun docker
+     echo Starting Docker entrypoint
+     # force daemon mode off
+     sed -i -e "1idaemon off;" /etc/nginx/nginx.conf
+     /docker-entrypoint.sh $*
+
