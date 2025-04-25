@@ -13,57 +13,12 @@ module list
 
 echo port is $port
 echo host is $host
+
+echo
+echo NOT USING THESE now:
 echo webui_port is $webui_port
 echo ollama_port is $ollama_port
-
-
-
-# start ollama # could change 0.0.0.0 to 127.0.0.1 but we may want to give users
-# direct access to the ollama api
-# apptainer run --env OLLAMA_HOST=0.0.0.0:${ollama_port} --bind /app/ollama:/app/ollama:ro --env OLLAMA_MODELS=/app/ollama/models/ /app/containers/ollama_latest.sif  > ollama.out 2>&1 &
-
-# maybe wait a bit....
-
-# TODO remove OLLAMA_HOST?
-
-# Note: ultimately we want open-webui in a module or
-# container (I've had trouble making that happen so far)
-# because it will load a lot faster on the initial load.
-# However, uvx does seem to cache what it needs, so subsequent runs
-# are faster.
-# echo starting open-webui....
-
-# uvs is slow - need a faster way. For now let's use a venv that is only installed for dtenenba:
-# OLLAMA_BASE_URL=http://localhost:${ollama_port} OLLAMA_MODELS=/app/ollama/models/ OPENWEBUI_PORT=65535 OLLAMA_HOST=localhost:11444 /home/dtenenba/dev/open-webui-frob/.venv/bin/open-webui serve --port ${webui_port}
-
-
-# using a fork that supports changing the base URL:
-# export FRONTEND_APP_ROOT="/rnode/$(hostname)/${port}"
-
-# OLLAMA_BASE_URL=http://localhost:${ollama_port} OLLAMA_MODELS=/app/ollama/models/ OPENWEBUI_PORT=65535 OLLAMA_HOST=localhost:11444 /home/dtenenba/dev/open-webui-relative-urls/.venv/bin/open-webui serve --port ${webui_port}
-
-
-
-####OLLAMA_BASE_URL=http://localhost:${ollama_port} OLLAMA_MODELS=/app/ollama/models/ OPENWEBUI_PORT=65535 OLLAMA_HOST=localhost:11444 uvx open-webui serve --port ${webui_port}
-
-
-
-
-# Launch the RStudio Server
-# echo "Starting up rserver..."
-# set -x
-# rserver \
-#   --www-port ${port} \
-#   --auth-none 0 \
-#   --auth-pam-helper-path "${RSTUDIO_AUTH}" \
-#   --auth-encrypt-password 0 \
-#   --rsession-path "${RSESSION_WRAPPER_FILE}" \
-#   --server-data-dir "${TMPDIR}" \
-#   --secure-cookie-key-file "${TMPDIR}/rstudio-server/secure-cookie-key" \
-#   --database-config-file "${DBCONF}" \
-#   --server-user $(whoami)
-
-# echo we will never see this
+echo ------
 
 
 # excerpt from https://discourse.openondemand.org/t/avoid-launching-a-web-browser/4060/14?u=dtenenba
@@ -83,9 +38,9 @@ end
 set -x
 set -e
 
-export OLLAMA_HOST=$(hostname):${ollama_port}
+export OLLAMA_HOST=${host}:11434
 export OLLAMA_MODELS=/app/ollama/models
-apptainer run  <%= nv %>  --env OLLAMA_HOST=$(hostname):$ollama_port -B /app/ollama/models:/app/ollama/models:ro --writable-tmpfs --env OLLAMA_MODELS=${OLLAMA_MODELS} https://sif-registry.fredhutch.org/ollama_latest.sif  serve &
+apptainer run  <%= nv %>  --env OLLAMA_HOST=${host}:11434 -B /app/ollama/models:/app/ollama/models:ro --writable-tmpfs --env OLLAMA_MODELS=${OLLAMA_MODELS} https://sif-registry.fredhutch.org/ollama_latest.sif  serve &
 mkdir openwebui # maybe the next line is a typo?
 mkdir openwebui. # this is where the database shows up, and is per-instance
 mkdir conf
@@ -94,11 +49,10 @@ mkdir var_run
 # TODO removing --env-file env_file for now
 # TODO removing --overlay openwebui for now
 mkdir -p ~/.openwebui
-apptainer run -B ~/.openwebui:/app/backend/data:rw --env PORT=${webui_port} --env OLLAMA_BASE_URL=http://$(hostname):$ollama_port  https://sif-registry.fredhutch.org/open-webui_v0.5.18.sif  &
+apptainer run -B ~/.openwebui:/app/backend/data:rw https://sif-registry.fredhutch.org/open-webui_v0.5.18.sif  &
 apptainer run --writable-tmpfs \
      --env FORWARD_PORT=${port} \
      --env FORWARD_HOST=${host} \
-     --env WEBUI_PORT=${webui_port} \
      -B ./templates:/etc/nginx/templates \
      -B ./:/var/log/nginx/ \
      -B ./conf:/etc/nginx/conf.d/ \

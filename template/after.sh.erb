@@ -1,10 +1,10 @@
 # Wait for the open-webui to start
-echo "Waiting for open-webui to open port ${webui_port}..."
+echo "Waiting for open-webui to open port 8080..."
 # TODO shorten timeout
-if wait_until_port_used "${host}:${webui_port}" 1200; then
-  echo "Discovered open-webui listening on port ${webui_port}!"
+if wait_until_port_used "${host}:8080" 1200; then
+  echo "Discovered open-webui listening on port $8080!"
 else
-  echo "Timed out waiting for open-webui to open port ${webui_port}!"
+  echo "Timed out waiting for open-webui to open port 8080!"
   clean_up 1
 fi
 sleep 2

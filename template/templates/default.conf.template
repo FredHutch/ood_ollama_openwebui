@@ -14,7 +14,7 @@ server {
 
     location / {
         proxy_set_header Accept-Encoding "";
-        proxy_pass http://${FORWARD_HOST}:${WEBUI_PORT}/;
+        proxy_pass http://${FORWARD_HOST}:8080/;
         sub_filter 'href="/' 'href="/rnode/$server_name/${FORWARD_PORT}/';
         sub_filter 'src="/' 'src="/rnode/$server_name/${FORWARD_PORT}/';
         sub_filter 'import("/_app' 'import("/rnode/$server_name/${FORWARD_PORT}/_app';
@@ -29,7 +29,7 @@ server {
         proxy_cache_bypass $http_upgrade;
         }
     location /ws {
-        proxy_pass http://${FORWARD_HOST}:${WEBUI_PORT}/ws;
+        proxy_pass http://${FORWARD_HOST}:8080/ws;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
