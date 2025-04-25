@@ -4,13 +4,13 @@
   let date = new Date();
   date.setTime(date.getTime() + (7*24*60*60*1000));
   let expires = "expires=" + date.toUTCString();
-  let cookiePath = "path=/rnode/" + "<%= host.to_s %>" + "/" + "<%= port.to_s %>/";
+  let cookiePath = "path=/node/" + "<%= host.to_s %>" + "/" + "<%= port.to_s %>/";
   let cookie = `csrf-token=<%= csrf_token %>;${expires};${cookiePath};SameSite=strict;secure`;
   document.cookie = cookie;
   */
 })();
 </script>
- <a href="/rnode/<%= host %>/<%= port%>" target="_blank">
+ <a href="/node/<%= host %>/<%= port%>/" target="_blank">
   <button class="btn btn-primary" type="submit">
     <i class="fa"></i> Connect to Open-WebUI/Ollama
   </button>
