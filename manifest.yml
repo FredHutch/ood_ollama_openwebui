@@ -3,5 +3,5 @@ name: local LLMs
 category: Interactive Apps
 role: batch_connect
 description: |
-  This app will launch [Open WebUI](https://openwebui.com/), an interface to [Ollama](https://ollama.com/),
-  giving you access to a curated selection of large language models (LLMs).
+  This app will launch [ollama-chat](https://github.com/FredHutch/ollama-chat), a conversational AI chat client that uses Ollama to interact with a curated set of large language models (LLMs) entirely offline.
+

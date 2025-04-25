@@ -46,13 +46,12 @@ echo "OLLAMA_CHAT_URL_PREFIX=${OLLAMA_CHAT_URL_PREFIX}"
 apptainer run  <%= nv %>  --env OLLAMA_HOST=$localhost:11434 -B /app/ollama/models:/app/ollama/models:ro --writable-tmpfs --env OLLAMA_MODELS=${OLLAMA_MODELS} https://sif-registry.fredhutch.org/ollama_latest.sif  serve  > /dev/null 2>&1 &
 
 
-#uv run --with git+https://github.com/FredHutch/ollama-chat.git ollama-chat -p ${port} -x -n
-# cd ~/dev/ollama-chat
-# source .venv/bin/activate
-# ollama-chat
-
 echo we bout to do this
-/home/dtenenba/dev/ollama-chat/.venv/bin/ollama-chat -p ${port} -n -x
+
+
+uv run --with git+https://github.com/FredHutch/ollama-chat.git ollama-chat -p ${port} -x -n
+
+# /home/dtenenba/dev/ollama-chat/.venv/bin/ollama-chat -p ${port} -n -x
 
 echo we did that
 
