@@ -15,8 +15,6 @@ echo port is $port
 echo host is $host
 
 echo
-echo NOT USING THESE now:
-echo webui_port is $webui_port
 echo ollama_port is $ollama_port
 echo ------
 
@@ -38,32 +36,23 @@ end
 set -x
 set -e
 
-export OLLAMA_HOST=${host}:11434
+export OLLAMA_HOST=${host}:${ollama_port}
 export OLLAMA_MODELS=/app/ollama/models
 export OLLAMA_CHAT_HOST=0.0.0.0
 export OLLAMA_CHAT_URL_PREFIX=/node/${host}/${port}
 echo "OLLAMA_CHAT_URL_PREFIX=${OLLAMA_CHAT_URL_PREFIX}"
-apptainer run  <%= nv %>  --env OLLAMA_HOST=$localhost:11434 -B /app/ollama/models:/app/ollama/models:ro --writable-tmpfs --env OLLAMA_MODELS=${OLLAMA_MODELS} https://sif-registry.fredhutch.org/ollama_latest.sif  serve  > /dev/null 2>&1 &
+apptainer run  <%= nv %>  --env OLLAMA_HOST=$localhost:${ollama_port} -B /app/ollama/models:/app/ollama/models:ro --writable-tmpfs --env OLLAMA_MODELS=${OLLAMA_MODELS} https://sif-registry.fredhutch.org/ollama_latest.sif  serve  &
+
+# needs (?) to be in a slightly different form for the UI:
+export OLLAMA_HOST=http://${host}:${ollama_port}
 
 
-echo we bout to do this
 
 
 uv run --with git+https://github.com/FredHutch/ollama-chat.git ollama-chat -p ${port} -x -n
 
 # /home/dtenenba/dev/ollama-chat/.venv/bin/ollama-chat -p ${port} -n -x
 
-echo we did that
 
 
-# apptainer run --writable-tmpfs \
-#      --env FORWARD_PORT=${port} \
-#      --env FORWARD_HOST=${host} \
-#      -B ./templates:/etc/nginx/templates \
-#      -B ./:/var/log/nginx/ \
-#      -B ./conf:/etc/nginx/conf.d/ \
-#      -B ./client_temp:/var/cache/nginx/client_temp/ \
-#      -B ./var_run:/var/run/ \
-#      --app docker \
-#      https://sif-registry.fredhutch.org/nginx_1.26.3.sif nginx
 
