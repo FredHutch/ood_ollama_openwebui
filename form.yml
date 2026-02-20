@@ -5,7 +5,7 @@ form:
 # but rserver shows up in the context json file. Changing it here to be consistent.
   # - rserver
   # - Rapp
-  - bc_num_hours
+  - num_days
   - bc_email_on_started
   - num_cores
   - want_gpu
@@ -14,8 +14,8 @@ attributes:
     widget: "check_box"
     label: "Request a GPU"
     help: |
-      Request a GPU for your session. The default is no GPU.
-    value: false
+      Request a GPU for your session. The default is to use one, as LLMs will be slow without it.
+    value: true
     id: 'want_gpu'
   num_cores:
     widget: "number_field"
@@ -28,9 +28,10 @@ attributes:
     max: 20
     step: 1
     id: 'num_cores'
-# it's optional to put bc_num_hours here; if left out, it will still show up in the form, but
-# putting us here allows us to set a maximum:
-  bc_num_hours:
-    min: 1
-    max: 8
-    step: 1
+  num_days:
+      value: 1
+      widget: "number_field"
+      label: "Number of days to run"
+      min: 1
+      max: 7
+      step: 1
