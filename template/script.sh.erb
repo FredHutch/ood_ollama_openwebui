@@ -35,12 +35,13 @@ end
 set -x
 set -e
 
+# TODO add .fhcrc.org here?
 export OLLAMA_HOST=${host}:${ollama_port}
 export OLLAMA_MODELS=/app/ollama/models
 export OLLAMA_CHAT_HOST=0.0.0.0
 export OLLAMA_CHAT_URL_PREFIX=/node/${host}/${port}
 echo "OLLAMA_CHAT_URL_PREFIX=${OLLAMA_CHAT_URL_PREFIX}"
-apptainer run  <%= nv %>  --env OLLAMA_HOST=$localhost:${ollama_port} -B /app/ollama/models:/app/ollama/models:ro --writable-tmpfs --env OLLAMA_MODELS=${OLLAMA_MODELS} https://sif-registry.fredhutch.org/ollama_latest.sif  serve  &
+apptainer run  <%= nv %>  --env OLLAMA_HOST=$localhost:${ollama_port} -B /app/ollama/models:/app/ollama/models:ro --writable-tmpfs --env OLLAMA_MODELS=${OLLAMA_MODELS} https://sif-registry.fredhutch.org/ollama_0.16.3.sif  serve  &
 
 # needs (?) to be in a slightly different form for the UI:
 export OLLAMA_HOST=http://${host}:${ollama_port}
