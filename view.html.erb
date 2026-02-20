@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 (function () {
   /*
@@ -10,6 +11,17 @@
   */
 })();
 </script>
+<p>
+  You can connect to a simple chat client by clicking the button below,
+  or you can use this Ollama server with other clients such as 
+  <a href="https://github.com/ggozad/oterm">oterm</a>, 
+  <a href="https://opencode.ai/">OpenCode</a>, or 
+  <a href="https://claude.com/product/claude-code">Claude Code</a>.
+ </p>
+ <p>
+  You'll need to configure those clients with the Ollama URL, which is<br/>
+ <a href="http://<%= host %>.fhcrc.org:<%= ollama_port %>">http://<%= host %>.fhcrc.org:<%= ollama_port %></a>
+ </p>
  <a href="/node/<%= host %>/<%= port%>/" target="_blank">
   <button class="btn btn-primary" type="submit">
     <i class="fa"></i> Connect to Open-WebUI/Ollama
