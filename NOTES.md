@@ -1,3 +1,19 @@
+# How to add/remove models
+
+on sc-build-01 run
+
+```
+docker run --rm --name ollama -d -v /app/ollama:/root/.ollama ollama/ollama:latest
+docker exec -ti ollama bash
+ollama pull ...
+ollama rm ...
+```
+
+
+-----
+
+
+
 docker run -d -p 3000:8080 -v ollama:/root/.ollama -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:ollama
 
 
